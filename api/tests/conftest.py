@@ -143,3 +143,13 @@ async def inactive_user(db: AsyncSession) -> User:
     db.add(user)
     await db.commit()
     return user
+
+
+@pytest.fixture
+async def admin_auth(client: AsyncClient, admin_user: User) -> dict:
+    return await auth_header(client, "testadmin", "admin123")
+
+
+@pytest.fixture
+async def customer_auth(client: AsyncClient, customer_user: User) -> dict:
+    return await auth_header(client, "testcustomer", "kupac123")

@@ -12,12 +12,13 @@ from app.core.errors import (
 from app.core.logging import setup_logging
 from app.routers.auth import router as auth_router
 from app.routers.health import router as health_router
+from app.routers.orders import router as orders_router
 from app.routers.products import router as products_router
 
 
 def create_app(config: Settings = settings) -> FastAPI:
     setup_logging(debug=config.ENV == "dev")
-    app = FastAPI(title=config.APP_NAME, debug=config.ENV == "dev")
+    app = FastAPI(title="Webshop API", debug=config.ENV == "dev")
 
     app.add_exception_handler(AppError, app_error_handler)
     app.add_exception_handler(RequestValidationError, validation_error_handler)
@@ -26,6 +27,7 @@ def create_app(config: Settings = settings) -> FastAPI:
     app.include_router(health_router, prefix="/health", tags=["health"])
     app.include_router(auth_router, prefix="/auth", tags=["auth"])
     app.include_router(products_router, prefix="/products", tags=["products"])
+    app.include_router(orders_router, prefix="/orders", tags=["orders"])
     return app
 
 

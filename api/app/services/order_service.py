@@ -52,10 +52,18 @@ async def create_order(
     )
 
 
-async def list_orders(db: AsyncSession, current_user: User) -> list[Order]:
+async def list_orders(
+    db: AsyncSession,
+    current_user: User,
+    *,
+    limit: int = 20,
+    offset: int = 0,
+) -> list[Order]:
     if current_user.role == "admin":
-        return await order_repo.list_orders(db)
-    return await order_repo.list_orders(db, user_id=current_user.id)
+        return await order_repo.list_orders(db, limit=limit, offset=offset)
+    return await order_repo.list_orders(
+        db, user_id=current_user.id, limit=limit, offset=offset
+    )
 
 
 async def get_order(

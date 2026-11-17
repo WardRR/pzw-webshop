@@ -13,10 +13,16 @@ router = APIRouter()
 async def list_products(
     search: str | None = Query(default=None, min_length=1, max_length=100),
     in_stock: bool = Query(default=False),
+    limit: int = Query(default=20, ge=1, le=100),
+    offset: int = Query(default=0, ge=0),
     db: AsyncSession = Depends(get_db),
 ):
     return await product_service.list_products(
-        db, search=search, in_stock_only=in_stock
+        db,
+        search=search,
+        in_stock_only=in_stock,
+        limit=limit,
+        offset=offset,
     )
 
 

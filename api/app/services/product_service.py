@@ -12,12 +12,16 @@ async def list_products(
     include_inactive: bool = False,
     search: str | None = None,
     in_stock_only: bool = False,
+    limit: int = 20,
+    offset: int = 0,
 ) -> list[Product]:
     return await product_repo.list_products(
         db,
         include_inactive=include_inactive,
         search=search,
         in_stock_only=in_stock_only,
+        limit=limit,
+        offset=offset,
     )
 
 

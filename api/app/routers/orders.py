@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, status
+from fastapi import APIRouter, Depends, Query, status
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.core.deps import get_current_user, get_db, require_role
@@ -20,10 +20,14 @@ async def create_order(
 
 @router.get("", response_model=list[OrderRead])
 async def list_orders(
+    limit: int = Query(default=20, ge=1, le=100),
+    offset: int = Query(default=0, ge=0),
     db: AsyncSession = Depends(get_db),
     current_user: User = Depends(get_current_user),
 ):
-    return await order_service.list_orders(db, current_user)
+    return await order_service.list_orders(
+        db, current_user, limit=limit, offset=offset
+    )
 
 
 @router.get("/{order_id}", response_model=OrderRead)

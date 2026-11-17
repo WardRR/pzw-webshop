@@ -18,7 +18,11 @@ async def get_by_id(db: AsyncSession, order_id: int) -> Order | None:
 
 
 async def list_orders(
-    db: AsyncSession, *, user_id: int | None = None
+    db: AsyncSession,
+    *,
+    user_id: int | None = None,
+    limit: int = 20,
+    offset: int = 0,
 ) -> list[Order]:
     stmt = (
         select(Order)
@@ -27,6 +31,7 @@ async def list_orders(
     )
     if user_id is not None:
         stmt = stmt.where(Order.user_id == user_id)
+    stmt = stmt.limit(limit).offset(offset)
     result = await db.execute(stmt)
     return list(result.scalars().all())
 

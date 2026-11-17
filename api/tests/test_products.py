@@ -77,3 +77,19 @@ async def test_search_and_soft_delete_product(client, admin_auth):
 
     get_resp = await client.get(f"/products/{monitor_id}")
     assert get_resp.status_code == 404
+
+async def test_products_pagination(client, admin_auth):
+    for i in range(1, 6):
+        await client.post(
+            "/products",
+            headers=admin_auth,
+            json={"name": f"Proizvod {i}", "price": "10.00", "stock": 5},
+        )
+
+    page1 = await client.get("/products", params={"limit": 2, "offset": 0})
+    assert page1.status_code == 200
+    assert [p["name"] for p in page1.json()] == ["Proizvod 1", "Proizvod 2"]
+
+    page2 = await client.get("/products", params={"limit": 2, "offset": 2})
+    assert page2.status_code == 200
+    assert [p["name"] for p in page2.json()] == ["Proizvod 3", "Proizvod 4"]

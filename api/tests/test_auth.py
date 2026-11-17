@@ -164,3 +164,34 @@ async def test_refresh_rejects_access_token(client, admin_user):
 async def test_refresh_rejects_garbage(client):
     resp = await client.post("/auth/refresh", json={"refresh_token": "nije.jwt.token"})
     assert resp.status_code == 401
+
+
+async def test_register_customer_and_login(client):
+    reg = await client.post(
+        "/auth/register",
+        json={"username": "novikupac@webshop.hr", "password": "lozinka123"},
+    )
+    assert reg.status_code == 201
+    data = reg.json()
+    assert data["username"] == "novikupac@webshop.hr"
+    assert data["role"] == "customer"
+    assert "password_hash" not in data
+
+    login = await client.post(
+        "/auth/login",
+        json={"username": "novikupac@webshop.hr", "password": "lozinka123"},
+    )
+    assert login.status_code == 200
+
+
+async def test_register_duplicate_username_returns_409(client):
+    await client.post(
+        "/auth/register",
+        json={"username": "dupli@webshop.hr", "password": "lozinka123"},
+    )
+    dup = await client.post(
+        "/auth/register",
+        json={"username": "dupli@webshop.hr", "password": "lozinka123"},
+    )
+    assert dup.status_code == 409
+    assert dup.json()["code"] == "username_taken"

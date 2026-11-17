@@ -16,6 +16,11 @@ Password = Annotated[str, Field(min_length=1), AfterValidator(_bcrypt_limit)]
 NewPassword = Annotated[str, Field(min_length=8), AfterValidator(_bcrypt_limit)]
 
 
+class RegisterRequest(BaseModel):
+    username: str = Field(min_length=3, max_length=255)
+    password: NewPassword
+
+
 class LoginRequest(BaseModel):
     username: str = Field(min_length=1, max_length=255)
     password: Password

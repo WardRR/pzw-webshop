@@ -48,3 +48,22 @@ async def refresh_tokens(db: AsyncSession, refresh_token: str) -> tuple[str, str
         raise AppError("invalid_credentials", "Neispravan refresh token", 401)
     # Novi par: i refresh token dobiva novi vijek
     return create_tokens(user)
+
+
+async def register_customer(
+    db: AsyncSession, username: str, password: str
+) -> User:
+    cleaned = username.strip()
+    existing = await user_repo.get_by_username(db, cleaned)
+    if existing is not None:
+        raise AppError(
+            "username_taken",
+            "Korisničko ime je već zauzeto",
+            409,
+        )
+    user = User(
+        username=cleaned,
+        password_hash=hash_password(password),
+        role="customer",
+    )
+    return await user_repo.create(db, user)

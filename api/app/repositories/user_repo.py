@@ -13,11 +13,6 @@ async def get_by_username(db: AsyncSession, username: str) -> User | None:
     return result.scalar_one_or_none()
 
 
-async def get_by_club_id(db: AsyncSession, club_id: int) -> User | None:
-    result = await db.execute(select(User).where(User.club_id == club_id))
-    return result.scalar_one_or_none()
-
-
 async def create(db: AsyncSession, user: User) -> User:
     db.add(user)
     await db.flush()

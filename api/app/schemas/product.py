@@ -5,20 +5,24 @@ from pydantic import BaseModel, ConfigDict, Field
 
 
 class ProductCreate(BaseModel):
+    model_config = ConfigDict(str_strip_whitespace=True)
+
     name: str = Field(min_length=1, max_length=200)
     description: Optional[str] = None
     price: Decimal = Field(gt=0, max_digits=10, decimal_places=2)
     # gt=0 zabranjuje negativnu cijenu, a ge=0 negativnu zalihu
-    stock: int = Field(ge=0)
+    stock: int = Field(ge=0, le=2_147_483_647)
 
 
 class ProductUpdate(BaseModel):
+    model_config = ConfigDict(str_strip_whitespace=True)
+
     name: Optional[str] = Field(default=None, min_length=1, max_length=200)
     description: Optional[str] = None
     price: Optional[Decimal] = Field(
         default=None, gt=0, max_digits=10, decimal_places=2
     )
-    stock: Optional[int] = Field(default=None, ge=0)
+    stock: Optional[int] = Field(default=None, ge=0, le=2_147_483_647)
     is_active: Optional[bool] = None
 
 

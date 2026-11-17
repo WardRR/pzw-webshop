@@ -123,6 +123,13 @@ async def update_order_status(
             409,
         )
 
+    if order.status == "completed" and new_status != "completed":
+        raise AppError(
+            "invalid_status",
+            "Završenu narudžbu nije moguće mijenjati",
+            409,
+        )
+
     if order.status != "cancelled" and new_status == "cancelled":
         await _restock_order_items(db, order)
 

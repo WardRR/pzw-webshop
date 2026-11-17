@@ -47,9 +47,7 @@ async def test_customer_cannot_create_update_or_delete_product(
     )
     assert patch_resp.status_code == 403
 
-    del_resp = await client.delete(
-        f"/products/{product_id}", headers=customer_auth
-    )
+    del_resp = await client.delete(f"/products/{product_id}", headers=customer_auth)
     assert del_resp.status_code == 403
 
 
@@ -77,6 +75,7 @@ async def test_search_and_soft_delete_product(client, admin_auth):
 
     get_resp = await client.get(f"/products/{monitor_id}")
     assert get_resp.status_code == 404
+
 
 async def test_products_pagination(client, admin_auth):
     for i in range(1, 6):

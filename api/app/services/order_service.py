@@ -28,7 +28,7 @@ async def create_order(
         if product.stock < qty:
             raise AppError(
                 "insufficient_stock",
-                f"Nedovoljna zaliha za proizvod '{product.name}' (dostupno: {product.stock})",
+                f"Nedovoljna zaliha za '{product.name}' (dostupno: {product.stock})",
                 409,
             )
 
@@ -66,9 +66,7 @@ async def list_orders(
     )
 
 
-async def get_order(
-    db: AsyncSession, order_id: int, current_user: User
-) -> Order:
+async def get_order(db: AsyncSession, order_id: int, current_user: User) -> Order:
     order = await order_repo.get_by_id(db, order_id)
     if order is None:
         raise AppError("not_found", "Narudžba nije pronađena", 404)
@@ -84,9 +82,7 @@ async def _restock_order_items(db: AsyncSession, order: Order) -> None:
             product.stock += item.quantity
 
 
-async def cancel_order(
-    db: AsyncSession, order_id: int, current_user: User
-) -> Order:
+async def cancel_order(db: AsyncSession, order_id: int, current_user: User) -> Order:
     order = await get_order(db, order_id, current_user)
     if order.status != "pending":
         raise AppError(

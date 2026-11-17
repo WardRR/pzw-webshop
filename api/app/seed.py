@@ -25,11 +25,26 @@ DEMO_CUSTOMERS = [
 ]
 
 DEMO_PRODUCTS = [
-    ("Mehanička tipkovnica", "Kompaktna 75% tipkovnica, RGB osvjetljenje", Decimal("89.99"), 15),
+    (
+        "Mehanička tipkovnica",
+        "Kompaktna 75% tipkovnica, RGB osvjetljenje",
+        Decimal("89.99"),
+        15,
+    ),
     ("Bežični miš", "Ergonomski optički miš, USB-C punjenje", Decimal("45.50"), 25),
-    ("27\" IPS Monitor", "QHD 1440p, 165Hz, DisplayPort i HDMI", Decimal("279.00"), 8),
-    ("USB-C Hub 7-u-1", "HDMI, 3x USB 3.0, SD čitač i PD punjenje", Decimal("34.90"), 30),
-    ("Studijske slušalice", "Zatvorene over-ear slušalice za rad", Decimal("119.00"), 12),
+    ('27" IPS Monitor', "QHD 1440p, 165Hz, DisplayPort i HDMI", Decimal("279.00"), 8),
+    (
+        "USB-C Hub 7-u-1",
+        "HDMI, 3x USB 3.0, SD čitač i PD punjenje",
+        Decimal("34.90"),
+        30,
+    ),
+    (
+        "Studijske slušalice",
+        "Zatvorene over-ear slušalice za rad",
+        Decimal("119.00"),
+        12,
+    ),
 ]
 
 

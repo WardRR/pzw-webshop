@@ -8,11 +8,7 @@ from app.models.order import Order, OrderItem
 
 
 async def get_by_id(db: AsyncSession, order_id: int) -> Order | None:
-    stmt = (
-        select(Order)
-        .options(selectinload(Order.items))
-        .where(Order.id == order_id)
-    )
+    stmt = select(Order).options(selectinload(Order.items)).where(Order.id == order_id)
     result = await db.execute(stmt)
     return result.scalar_one_or_none()
 
@@ -24,11 +20,7 @@ async def list_orders(
     limit: int = 20,
     offset: int = 0,
 ) -> list[Order]:
-    stmt = (
-        select(Order)
-        .options(selectinload(Order.items))
-        .order_by(Order.id.desc())
-    )
+    stmt = select(Order).options(selectinload(Order.items)).order_by(Order.id.desc())
     if user_id is not None:
         stmt = stmt.where(Order.user_id == user_id)
     stmt = stmt.limit(limit).offset(offset)

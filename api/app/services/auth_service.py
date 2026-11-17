@@ -50,9 +50,7 @@ async def refresh_tokens(db: AsyncSession, refresh_token: str) -> tuple[str, str
     return create_tokens(user)
 
 
-async def register_customer(
-    db: AsyncSession, username: str, password: str
-) -> User:
+async def register_customer(db: AsyncSession, username: str, password: str) -> User:
     cleaned = username.strip()
     existing = await user_repo.get_by_username(db, cleaned)
     if existing is not None:

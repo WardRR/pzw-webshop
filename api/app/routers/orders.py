@@ -25,9 +25,7 @@ async def list_orders(
     db: AsyncSession = Depends(get_db),
     current_user: User = Depends(get_current_user),
 ):
-    return await order_service.list_orders(
-        db, current_user, limit=limit, offset=offset
-    )
+    return await order_service.list_orders(db, current_user, limit=limit, offset=offset)
 
 
 @router.get("/{order_id}", response_model=OrderRead)

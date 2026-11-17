@@ -66,9 +66,7 @@ async def test_customer_cannot_view_other_users_order(
     order_id = order_resp.json()["id"]
 
     customer_b_auth = await auth_header(client, customer_b_user.username, "kupac123")
-    forbidden_resp = await client.get(
-        f"/orders/{order_id}", headers=customer_b_auth
-    )
+    forbidden_resp = await client.get(f"/orders/{order_id}", headers=customer_b_auth)
     assert forbidden_resp.status_code == 403
 
 
@@ -95,9 +93,7 @@ async def test_cancel_order_restocks_and_blocks_after_24h_with_freezegun(
 
     with freeze_time("2026-11-18 09:00:00+00:00"):
         headers_t23 = await auth_header(client, customer_user.username, "kupac123")
-        cancel_resp = await client.post(
-            f"/orders/{o1_id}/cancel", headers=headers_t23
-        )
+        cancel_resp = await client.post(f"/orders/{o1_id}/cancel", headers=headers_t23)
         assert cancel_resp.status_code == 200
         assert cancel_resp.json()["status"] == "cancelled"
 
@@ -117,8 +113,6 @@ async def test_cancel_order_restocks_and_blocks_after_24h_with_freezegun(
 
     with freeze_time("2026-11-18 10:01:00+00:00"):
         headers_t24 = await auth_header(client, customer_user.username, "kupac123")
-        late_cancel = await client.post(
-            f"/orders/{o2_id}/cancel", headers=headers_t24
-        )
+        late_cancel = await client.post(f"/orders/{o2_id}/cancel", headers=headers_t24)
         assert late_cancel.status_code == 409
         assert late_cancel.json()["code"] == "cancellation_expired"
